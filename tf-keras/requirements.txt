@@ -2,4 +2,5 @@ awkward>=0.12.0
 numpy>=1.14.0
 pandas>=0.23.4
 uproot-methods>=0.7.0
+tables==2.7.1
 tensorflow-gpu>=2.0.0

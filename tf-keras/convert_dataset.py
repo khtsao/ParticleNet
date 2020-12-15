@@ -28,12 +28,12 @@ def _transform(dataframe, start=0, stop=-1, jet_size=0.8):
     df = dataframe.iloc[start:stop]
     def _col_list(prefix, max_particles=200):
         return ['%s_%d'%(prefix,i) for i in range(max_particles)]
-    
+
     _px = df[_col_list('PX')].values
     _py = df[_col_list('PY')].values
     _pz = df[_col_list('PZ')].values
     _e = df[_col_list('E')].values
-    
+
     mask = _e>0
     n_particles = np.sum(mask, axis=1)
 
@@ -51,7 +51,7 @@ def _transform(dataframe, start=0, stop=-1, jet_size=0.8):
     _label = df['is_signal_new'].values
     v['label'] = np.stack((_label, 1-_label), axis=-1)
     v['train_val_test'] = df['ttv'].values
-    
+
     v['jet_pt'] = jet_p4.pt
     v['jet_eta'] = jet_p4.eta
     v['jet_phi'] = jet_p4.phi
@@ -124,8 +124,8 @@ def convert(source, destdir, basename, step=None, limit=None):
 # In[ ]:
 
 
-srcDir = 'original'
-destDir = 'converted'
+srcDir = "datasets/h5"
+destDir = 'datasets/particlenet'
 
 
 # In[ ]:
@@ -150,7 +150,3 @@ convert(os.path.join(srcDir, 'test.h5'), destdir=destDir, basename='test_file')
 
 
 # In[ ]:
-
-
-
-

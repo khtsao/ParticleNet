@@ -84,11 +84,11 @@ class Dataset(object):
             return self._label
         else:
             return self._values[key]
-    
+
     @property
     def X(self):
         return self._values
-    
+
     @property
     def y(self):
         return self._label
@@ -106,8 +106,8 @@ class Dataset(object):
 # In[6]:
 
 
-train_dataset = Dataset('converted/train_file_0.awkd', data_format='channel_last')
-val_dataset = Dataset('converted/val_file_0.awkd', data_format='channel_last')
+train_dataset = Dataset('datasets/particlenet/train_file_0.awkd', data_format='channel_last')
+val_dataset = Dataset('datasets/particlenet/val_file_0.awkd', data_format='channel_last')
 
 
 # In[ ]:
@@ -159,10 +159,17 @@ def lr_schedule(epoch):
 
 # In[11]:
 
+from sklearn.metrics import roc_auc_score
+from tensorflow.keras.metrics import Metric
+def auc(y_true, y_pred):
+    auc = tf.keras.metrics.AUC(y_true, y_pred)[1]
+    K.get_session().run(tf.local_variables_initializer())
+    return auc
+
 
 model.compile(loss='categorical_crossentropy',
               optimizer=keras.optimizers.Adam(learning_rate=lr_schedule(0)),
-              metrics=['accuracy'])
+              metrics=['accuracy', tf.keras.metrics.AUC()])
 model.summary()
 
 
@@ -199,10 +206,4 @@ model.fit(train_dataset.X, train_dataset.y,
           validation_data=(val_dataset.X, val_dataset.y),
           shuffle=True,
           callbacks=callbacks)
-
-
 # In[ ]:
-
-
-
-
