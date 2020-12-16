@@ -46,7 +46,7 @@ class Dataset(object):
         self.feature_dict = feature_dict
         if len(feature_dict)==0:
             feature_dict['points'] = ['part_etarel', 'part_phirel']
-            feature_dict['features'] = ['part_pt_log', 'part_e_log', 'part_etarel', 'part_phirel']
+            feature_dict['features'] = ['part_pt_log', 'part_e_log', 'part_etarel', 'part_phirel', 'part_logptrel', 'part_logerel', 'part_deltaR']
             feature_dict['mask'] = ['part_pt_log']
         self.label = label
         self.pad_len = pad_len
@@ -159,7 +159,6 @@ def lr_schedule(epoch):
 
 # In[11]:
 
-from sklearn.metrics import roc_auc_score
 from tensorflow.keras.metrics import Metric
 def auc(y_true, y_pred):
     auc = tf.keras.metrics.AUC(y_true, y_pred)[1]
@@ -201,8 +200,8 @@ callbacks = [checkpoint, lr_scheduler, progress_bar]
 train_dataset.shuffle()
 model.fit(train_dataset.X, train_dataset.y,
           batch_size=batch_size,
-#           epochs=epochs,
-          epochs=1, # --- train only for 1 epoch here for demonstration ---
+          epochs=epochs,
+#          epochs=1, # --- train only for 1 epoch here for demonstration ---
           validation_data=(val_dataset.X, val_dataset.y),
           shuffle=True,
           callbacks=callbacks)
